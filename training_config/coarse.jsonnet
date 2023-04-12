@@ -1,7 +1,7 @@
 // =================== Configurable Settings ======================
 
 // The pretrained model to use as encoder. This is a reasonable default for biomedical text.
-// Should be a registered name in the Transformers library (see https://huggingface.co/models) 
+// Should be a registered name in the Transformers library (see https://huggingface.co/models)
 // OR a path on disk to a serialized transformer model.
 local model_name = "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext";
 
@@ -33,11 +33,11 @@ local use_amp = true;
 
 // Lists containing the special entity/relation tokens in your target vocabulary
 local ent_tokens = [
-    "@ARG@",
-    "@TRIGGER@",
+    "@ENTITY@"
 ];
 local rel_tokens = [
-    "@OSP@",
+    "@EFFECT@",
+    "@MECHANISM@"
 ];
 
 // These are provided as external variables
@@ -196,7 +196,7 @@ local TARGET_TOKENIZER = {
                     ["transformer_model(?=.*(?:bias|LayerNorm|layer_norm))"],
                     {"lr": encoder_lr, "weight_decay": 0.0}
                 ],
-            ],  
+            ],
         },
         "learning_rate_scheduler": {
             "type": "linear_with_warmup",

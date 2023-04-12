@@ -1,7 +1,7 @@
 // =================== Configurable Settings ======================
 
 // The pretrained model to use as encoder. This is a reasonable default for biomedical text.
-// Should be a registered name in the Transformers library (see https://huggingface.co/models) 
+// Should be a registered name in the Transformers library (see https://huggingface.co/models)
 // OR a path on disk to a serialized transformer model.
 local model_name = "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext";
 
@@ -9,19 +9,19 @@ local model_name = "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltex
 local max_length = 512;       // Max length of input text
 local max_steps = 96;         // Max number of decoding steps
 
-local num_epochs = 30;        // Number of training epochs
+local num_epochs = 25;        // Number of training epochs
 local batch_size = 4;         // Per-GPU batch size
 local grad_acc_steps = 1;     // Number of training steps before backpropagating gradients
-local decoder_lr = 5e-4;      // Learning rate for decoder params
+local decoder_lr = 4e-4;      // Learning rate for decoder params
 
 local encoder_lr = 2e-5;      // Learning rate for encoder params
 local encoder_wd = 0.01;      // Weight decay for encoder params
-local reinit_layers = 1;      // Re-initializes the last N layers of the encoder
+local reinit_layers = 2;      // Re-initializes the last N layers of the encoder
 local dropout = 0.10;         // Dropout applied to decoder inputs and cross-attention weights
 local weight_dropout = 0.50;  // Weight dropout applied to hidden-to-hidden decoder weights
 
-local beam_size = 4;          // Beam size to use during decoding (test time only)
-local length_penalty = 0.8;   // >1.0 favours longer decodings and <1.0 shorter (test time only)
+local beam_size = 1;          // Beam size to use during decoding (test time only)
+local length_penalty = 1.0;   // >1.0 favours longer decodings and <1.0 shorter (test time only)
 
 // Number of GPUs to use. 0 means CPU only, 1 means one GPU, etc.
 local num_gpus = 1;
@@ -33,11 +33,11 @@ local use_amp = true;
 
 // Lists containing the special entity/relation tokens in your target vocabulary
 local ent_tokens = [
-    "@ARG@",
-    "@TRIGGER@",
+    "@ENTITY@"
 ];
 local rel_tokens = [
-    "@OSP@",
+    "@EFFECT@",
+    "@MECHANISM@"
 ];
 
 // These are provided as external variables
@@ -58,7 +58,8 @@ local warmup_steps = std.floor(dataset_size / batch_size * num_epochs * 0.10);
 // Assumes relation labels match the special relation tokens minus the "@" symbol
 local rel_labels = [std.stripChars(token, "@") for token in rel_tokens];
 // Special tokens used in the source and target strings
-local special_target_tokens = ent_tokens + rel_tokens + [";", "@start@", "@end@"];
+local special_source_tokens = ent_tokens;
+local special_target_tokens = ent_tokens + rel_tokens + ["@start@", "@end@", ";"];
 
 // Define source and target namespaces
 local source_namespace = "source_tokens";
@@ -68,6 +69,7 @@ local sorting_keys = [source_namespace];
 
 // Setup source tokenizer
 local source_tokenizer_kwargs = {
+    "additional_special_tokens": special_source_tokens,
     "do_lower_case": true
 };
 local SOURCE_TOKENIZER = {
@@ -196,7 +198,7 @@ local TARGET_TOKENIZER = {
                     ["transformer_model(?=.*(?:bias|LayerNorm|layer_norm))"],
                     {"lr": encoder_lr, "weight_decay": 0.0}
                 ],
-            ],  
+            ],
         },
         "learning_rate_scheduler": {
             "type": "linear_with_warmup",
