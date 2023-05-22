@@ -7,7 +7,7 @@ local model_name = "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltex
 
 // Number of GPUs to use. 0 means CPU only, 1 means one GPU, etc.
 local num_gpus = 1;
-local num_epochs = 30;        // Number of training epochs
+local num_epochs = 10;        // Number of training epochs
 local batch_size = 4;         // Per-GPU batch size
 local grad_acc_steps = 1;     // Number of training steps before backpropagating gradients
 local beam_size = 4;          // Beam size to use during decoding (test time only)
