@@ -38,7 +38,7 @@ local use_amp = true;
 // Lists containing the special entity/relation tokens in your target vocabulary
 local ent_tokens = [
     "@ARG0@",
-    "@ARG1@"
+    "@ARG1@",
     "@TRIGGER@",
 ];
 local rel_tokens = [
