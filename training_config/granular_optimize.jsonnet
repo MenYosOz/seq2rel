@@ -12,6 +12,7 @@ local batch_size = 4;         // Per-GPU batch size
 local grad_acc_steps = 1;     // Number of training steps before backpropagating gradients
 local beam_size = 4;          // Beam size to use during decoding (test time only)
 local length_penalty = 0.8;   // >1.0 favours longer decodings and <1.0 shorter (test time only)
+local encoder_wd = 0.01;      // Weight decay for encoder params
 
 // These are reasonable defaults.
 local max_length = std.parseInt(std.extVar('max_length'));       // Max length of input text
@@ -21,7 +22,7 @@ local reinit_layers = std.parseInt(std.extVar('reinit_layers'));      // Re-init
 
 local decoder_lr = std.parseJson(std.extVar('decoder_lr'));      // Learning rate for decoder params
 local encoder_lr = std.parseJson(std.extVar('encoder_lr'));      // Learning rate for encoder params
-local encoder_wd = std.parseJson(std.extVar('encoder_wd'));      // Weight decay for encoder params
+// local encoder_wd = std.parseJson(std.extVar('encoder_wd'));      // Weight decay for encoder params
 local dropout = std.parseJson(std.extVar('dropout'));         // Dropout applied to decoder inputs and cross-attention weights
 local weight_dropout = std.parseJson(std.extVar('weight_dropout'));  // Weight dropout applied to hidden-to-hidden decoder weights
 
