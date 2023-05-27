@@ -15,16 +15,16 @@ local length_penalty = 0.8;   // >1.0 favours longer decodings and <1.0 shorter 
 local encoder_wd = 0.01;      // Weight decay for encoder params
 
 // These are reasonable defaults.
-local max_length = 419;       // Max length of input text
-local max_steps = 81;         // Max number of decoding steps
-local reinit_layers = 3;      // Re-initializes the last N layers of the encoder
+local max_length = 365;       // Max length of input text
+local max_steps = 85;         // Max number of decoding steps
+local reinit_layers = 2;      // Re-initializes the last N layers of the encoder
 
 
-local decoder_lr = 0.00046423607864823325;      // Learning rate for decoder params
-local encoder_lr = 0.00003326325883844604;      // Learning rate for encoder params
+local decoder_lr = 0.00044132622604314814;      // Learning rate for decoder params
+local encoder_lr = 0.00003687999220605677;      // Learning rate for encoder params
 // local encoder_wd = std.parseJson(std.extVar('encoder_wd'));      // Weight decay for encoder params
-local dropout = 0.16772899831179422;         // Dropout applied to decoder inputs and cross-attention weights
-local weight_dropout = 0.6509697686033142;  // Weight dropout applied to hidden-to-hidden decoder weights
+local dropout = 0.15231475562580765;         // Dropout applied to decoder inputs and cross-attention weights
+local weight_dropout = 0.5947005797531761;  // Weight dropout applied to hidden-to-hidden decoder weights
 
 
 
@@ -37,11 +37,12 @@ local use_amp = true;
 
 // Lists containing the special entity/relation tokens in your target vocabulary
 local ent_tokens = [
-    "@ENTITY@"
+    "@ARG0@",
+    "@ARG1@",
+    "@TRIGGER@",
 ];
 local rel_tokens = [
-    "@EFFECT@",
-    "@MECHANISM@"
+    "@OSP@"
 ];
 
 // These are provided as external variables
